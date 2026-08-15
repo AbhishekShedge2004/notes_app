@@ -8,8 +8,10 @@ class DBHelper{
   //1. creating a private constructor
   DBHelper._();
 
+  static final DBHelper _instance = DBHelper._();
+
   //2. globally distribute
-  static DBHelper getInstance() => DBHelper._();
+  static DBHelper getInstance() => _instance;
 
   Database? mDB;
 
@@ -53,7 +55,7 @@ class DBHelper{
   Future<List<Map<String, dynamic>>> getAllNotes() async{
     Database db = await getDB();
 
-    List<Map<String, dynamic>> mData = await db.query(TABLE_NOTE_NAME);
+    List<Map<String, dynamic>> mData = await db.query(TABLE_NOTE_NAME, );
 
     return mData;
   }

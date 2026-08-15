@@ -1,7 +1,10 @@
+import "package:database_sqflite/db_helper.dart";
+import "package:database_sqflite/db_provider.dart";
 import "package:database_sqflite/home_page.dart";
 import "package:flutter/material.dart";
+import "package:provider/provider.dart";
 void main(){
-  runApp(MyApp());
+  runApp(ChangeNotifierProvider(create: (context) => DBProvider(dbHelper: DBHelper.getInstance()), child: MyApp(),));
 
 }
 

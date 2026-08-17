@@ -1,4 +1,4 @@
-import 'package:database_sqflite/db_helper.dart';
+import 'package:database_sqflite/database/db_helper.dart';
 import 'package:flutter/material.dart';
 
 class DBProvider extends ChangeNotifier{

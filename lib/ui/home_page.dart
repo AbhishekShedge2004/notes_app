@@ -1,3 +1,6 @@
+import "package:database_sqflite/bloc/db_bloc.dart";
+import "package:database_sqflite/bloc/db_events.dart";
+import "package:database_sqflite/bloc/db_state.dart";
 import "package:database_sqflite/ui/add_note_page.dart";
 import "package:database_sqflite/cubit/note_cubit.dart";
 import "package:database_sqflite/cubit/note_state.dart";
@@ -17,7 +20,7 @@ class HomePage extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
 
-    context.read<NoteCubit>().getInitialNotes();
+    context.read<DbBloc>().add(GetInitialNotes());
 
     return Scaffold(
       appBar: AppBar(
@@ -25,15 +28,16 @@ class HomePage extends StatelessWidget {
         backgroundColor: Colors.indigo,
         foregroundColor: Colors.white,
       ),
-      body: BlocBuilder<NoteCubit, NoteState>(
+      body: BlocBuilder<DbBloc, DBState>(
         builder: (context, state) {
-          if(state is LoadingState){
+
+          if(state is DBLoadingState){
             return Center(
               child: CircularProgressIndicator(),
             );
           }
 
-          if(state is LoadedState){
+          if(state is DBLoadedState){
             allNotes = state.mData;
             return allNotes.isNotEmpty
                 ? ListView.builder(
@@ -62,7 +66,7 @@ class HomePage extends StatelessWidget {
                       ),
                       IconButton(
                         onPressed: () async {
-                          context.read<NoteCubit>().deleteNote(mId: allNotes[index][DBHelper.COLUMN_NOTE_ID]);
+                          context.read<DbBloc>().add(DeleteNote(id: allNotes[index][DBHelper.COLUMN_NOTE_ID]));
                         },
                         icon: Icon(Icons.delete, color: Colors.red),
                       ),
@@ -90,11 +94,12 @@ class HomePage extends StatelessWidget {
             );
           }
 
-          if(state is ErrorState){
+          if(state is DBErrorState){
             return Center(
-              child: Text("${state.error}", style: TextStyle(fontSize: 21),),
+              child: Text(state.error, style: TextStyle(fontSize: 21),),
             );
           }
+
           return Container();
 
       },),

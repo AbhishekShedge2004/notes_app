@@ -1,3 +1,4 @@
+import "package:database_sqflite/bloc/db_bloc.dart";
 import "package:database_sqflite/cubit/note_cubit.dart";
 import "package:database_sqflite/database/db_helper.dart";
 import "package:database_sqflite/provider/db_provider.dart";
@@ -6,7 +7,7 @@ import "package:flutter/material.dart";
 import "package:flutter_bloc/flutter_bloc.dart";
 import "package:provider/provider.dart";
 void main(){
-  runApp(BlocProvider(create: (context) => NoteCubit(dbHelper: DBHelper.getInstance()), child: MyApp(),));
+  runApp(BlocProvider(create: (context) => DbBloc(dbHelper: DBHelper.getInstance()), child: MyApp(),));
 
 }
 

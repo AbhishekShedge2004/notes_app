@@ -1,3 +1,5 @@
+import "package:database_sqflite/bloc/db_bloc.dart";
+import "package:database_sqflite/bloc/db_events.dart";
 import "package:database_sqflite/cubit/note_cubit.dart";
 import "package:database_sqflite/database/db_helper.dart";
 import "package:database_sqflite/provider/db_provider.dart";
@@ -76,17 +78,21 @@ class AddNotePage extends StatelessWidget{
                   child: OutlinedButton(
                     onPressed: () async {
                       if (isUpdate) {
-                        context.read<NoteCubit>().updateNote(
-                            mId: id,
-                            mTitle: titleController.text,
-                            mDesc: descController.text,
-                            mUpdatedAt: DateTime.now().millisecondsSinceEpoch.toString()
+                        context.read<DbBloc>().add(
+                            UpdateNote(
+                                id: id,
+                                title: titleController.text,
+                                desc: descController.text,
+                                updatedAt: DateTime.now().millisecondsSinceEpoch.toString()
+                            )
                         );
                       } else {
-                        context.read<NoteCubit>().addNote(
-                            mTitle: titleController.text,
-                            mDesc: descController.text,
-                            mCreatedAt: DateTime.now().millisecondsSinceEpoch.toString()
+                        context.read<DbBloc>().add(
+                            AddNote(
+                                title: titleController.text,
+                                desc: descController.text,
+                                createdAt: DateTime.now().millisecondsSinceEpoch.toString()
+                            )
                         );
                       }
                       Navigator.pop(context);

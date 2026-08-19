@@ -1,3 +1,4 @@
+import 'package:database_sqflite/model/note_model.dart';
 import 'package:path/path.dart';
 import 'package:path_provider/path_provider.dart';
 import 'package:sqflite/sqflite.dart';
@@ -41,32 +42,30 @@ class DBHelper{
 
   }
 
-  Future<bool> addNote({required String title, required String desc, required String createdAt}) async{
+  Future<bool> addNote({required NoteModel newNote}) async{
     Database db = await getDB();
-    int rowsEffected = await db.insert(TABLE_NOTE_NAME, {
-      COLUMN_NOTE_TITLE : title,
-      COLUMN_NOTE_DESC : desc,
-      COLUMN_NOTE_CREATE_AT : createdAt
-    });
+    int rowsEffected = await db.insert(TABLE_NOTE_NAME, newNote.toMap());
     return rowsEffected>0;
   }
 
 
-  Future<List<Map<String, dynamic>>> getAllNotes() async{
+  Future<List<NoteModel>> getAllNotes() async{
     Database db = await getDB();
 
-    List<Map<String, dynamic>> mData = await db.query(TABLE_NOTE_NAME, );
-
-    return mData;
+    List<Map<String, dynamic>> mData = await db.query(TABLE_NOTE_NAME,);
+    List<NoteModel> mNotes = [];
+    for(Map<String,dynamic> eachNote in mData){
+      NoteModel eachNoteModel = NoteModel.fromMap(eachNote);
+      mNotes.add(eachNoteModel);
+    }
+    return mNotes;
   }
 
-  Future<bool> updateNote({required String updatedTitle, required String updatedDesc,required String updatedAt, required int id}) async{
+  Future<bool> updateNote({required NoteModel updateNote}) async{
     Database db = await getDB();
-    int rowsEffected = await db.update(TABLE_NOTE_NAME, {
-      COLUMN_NOTE_TITLE : updatedTitle,
-      COLUMN_NOTE_DESC : updatedDesc,
-      COLUMN_NOTE_CREATE_AT : updatedAt
-    }, where: "$COLUMN_NOTE_ID = $id");
+    int rowsEffected = await db.update(TABLE_NOTE_NAME,
+        updateNote.toMap(),
+        where: "$COLUMN_NOTE_ID = ${updateNote.id}");
     return rowsEffected > 0 ;
   }
 

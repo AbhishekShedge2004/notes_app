@@ -1,4 +1,5 @@
 import 'package:database_sqflite/database/db_helper.dart';
+import 'package:database_sqflite/model/note_model.dart';
 import 'package:flutter/material.dart';
 
 class DBProvider extends ChangeNotifier{
@@ -8,14 +9,16 @@ class DBProvider extends ChangeNotifier{
 
 
   //data
-  List<Map<String,dynamic>> _mData = [];
+  List<NoteModel> _mData = [];
 
   //insert
-  void addNote({required String mTitle, required String mDesc, required String mCreatedAt}) async{
+  void addNote({required NoteModel newNote}) async{
     bool check = await dbHelper.addNote(
-        title: mTitle,
-        desc: mDesc,
-        createdAt: mCreatedAt
+       newNote: NoteModel(
+           title: newNote.title,
+           desc: newNote.desc,
+           createdAt: newNote.createdAt
+       )
     );
     if(check){
       _mData = await dbHelper.getAllNotes();
@@ -23,7 +26,7 @@ class DBProvider extends ChangeNotifier{
     }
   }
 
-  List<Map<String,dynamic>> getAllNotes() => _mData;
+  List<NoteModel> getAllNotes() => _mData;
 
   //fetch initial notes
   void getInitialNotes() async{
@@ -31,12 +34,14 @@ class DBProvider extends ChangeNotifier{
     notifyListeners();
   }
 
-  void updateNote({required String mTitle, required String mDesc, required String mCreatedAt, required int mId}) async{
+  void updateNote({required NoteModel updateNote}) async{
     bool check = await dbHelper.updateNote(
-        updatedTitle: mTitle,
-        updatedDesc: mDesc,
-        updatedAt: mCreatedAt,
-        id: mId
+        updateNote: NoteModel(
+            title: updateNote.title,
+            desc: updateNote.desc,
+            createdAt: updateNote.createdAt,
+            id: updateNote.id
+        )
     );
     if(check){
       _mData = await dbHelper.getAllNotes();

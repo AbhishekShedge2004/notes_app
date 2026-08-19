@@ -1,18 +1,15 @@
+import 'package:database_sqflite/model/note_model.dart';
+
 abstract class DBEvents{}
 
 class AddNote extends DBEvents{
-  String title;
-  String desc;
-  String createdAt;
-  AddNote({required this.title, required this.desc, required this.createdAt});
+  NoteModel newNote;
+  AddNote({required this.newNote});
 }
 
 class UpdateNote extends DBEvents{
-  int id;
-  String title;
-  String desc;
-  String updatedAt;
-  UpdateNote({required this.id, required this.title, required this.desc, required this.updatedAt});
+  NoteModel updateNote;
+  UpdateNote({required this.updateNote});
 }
 
 class DeleteNote extends DBEvents{

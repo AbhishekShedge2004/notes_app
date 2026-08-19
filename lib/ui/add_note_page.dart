@@ -2,6 +2,7 @@ import "package:database_sqflite/bloc/db_bloc.dart";
 import "package:database_sqflite/bloc/db_events.dart";
 import "package:database_sqflite/cubit/note_cubit.dart";
 import "package:database_sqflite/database/db_helper.dart";
+import "package:database_sqflite/model/note_model.dart";
 import "package:database_sqflite/provider/db_provider.dart";
 import "package:flutter/material.dart";
 import "package:provider/provider.dart";
@@ -80,18 +81,22 @@ class AddNotePage extends StatelessWidget{
                       if (isUpdate) {
                         context.read<DbBloc>().add(
                             UpdateNote(
-                                id: id,
-                                title: titleController.text,
-                                desc: descController.text,
-                                updatedAt: DateTime.now().millisecondsSinceEpoch.toString()
+                               updateNote: NoteModel(
+                                   title: titleController.text,
+                                   desc: descController.text,
+                                   createdAt: DateTime.now().millisecondsSinceEpoch.toString(),
+                                   id: id
+                               )
                             )
                         );
                       } else {
                         context.read<DbBloc>().add(
                             AddNote(
-                                title: titleController.text,
-                                desc: descController.text,
-                                createdAt: DateTime.now().millisecondsSinceEpoch.toString()
+                              newNote: NoteModel(
+                                  title: titleController.text,
+                                  desc: descController.text,
+                                  createdAt: DateTime.now().millisecondsSinceEpoch.toString()
+                              )
                             )
                         );
                       }

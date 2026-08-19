@@ -1,6 +1,7 @@
 import "package:database_sqflite/bloc/db_bloc.dart";
 import "package:database_sqflite/bloc/db_events.dart";
 import "package:database_sqflite/bloc/db_state.dart";
+import "package:database_sqflite/model/note_model.dart";
 import "package:database_sqflite/ui/add_note_page.dart";
 import "package:database_sqflite/cubit/note_cubit.dart";
 import "package:database_sqflite/cubit/note_state.dart";
@@ -14,7 +15,7 @@ import "package:sqflite/sqflite.dart";
 
 class HomePage extends StatelessWidget {
 
-  List<Map<String, dynamic>> allNotes = [];
+  List<NoteModel> allNotes = [];
   DateFormat mFormat = DateFormat.yMd();
 
   @override
@@ -47,26 +48,26 @@ class HomePage extends StatelessWidget {
                   title: Row(
                     mainAxisAlignment: MainAxisAlignment.spaceBetween,
                     children: [
-                      Expanded(child: Text(allNotes[index][DBHelper.COLUMN_NOTE_TITLE], overflow: TextOverflow.ellipsis, maxLines: 2,)),
-                      Text(mFormat.format(DateTime.fromMillisecondsSinceEpoch(int.parse(allNotes[index][DBHelper.COLUMN_NOTE_CREATE_AT]))), style: TextStyle(fontSize: 10), )
+                      Expanded(child: Text(allNotes[index].title, overflow: TextOverflow.ellipsis, maxLines: 2,)),
+                      Text(mFormat.format(DateTime.fromMillisecondsSinceEpoch(int.parse(allNotes[index].createdAt))), style: TextStyle(fontSize: 10), )
                     ],
                   ),
-                  subtitle: Text(allNotes[index][DBHelper.COLUMN_NOTE_DESC], maxLines: 3, overflow: TextOverflow.ellipsis,),
+                  subtitle: Text(allNotes[index].desc, maxLines: 3, overflow: TextOverflow.ellipsis,),
                   trailing: Row(
                     mainAxisSize: MainAxisSize.min,
                     children: [
                       IconButton(
                         onPressed: () {
-                          var title = allNotes[index][DBHelper.COLUMN_NOTE_TITLE];
-                          var desc = allNotes[index][DBHelper.COLUMN_NOTE_DESC];
-                          Navigator.push(context, MaterialPageRoute(builder: (context) => AddNotePage(isUpdate: true, id: allNotes[index][DBHelper.COLUMN_NOTE_ID], title: title, desc: desc,),));
+                          var title = allNotes[index].title;
+                          var desc = allNotes[index].desc;
+                          Navigator.push(context, MaterialPageRoute(builder: (context) => AddNotePage(isUpdate: true, id: allNotes[index].id!, title: title, desc: desc,),));
 
                         },
                         icon: Icon(Icons.edit),
                       ),
                       IconButton(
                         onPressed: () async {
-                          context.read<DbBloc>().add(DeleteNote(id: allNotes[index][DBHelper.COLUMN_NOTE_ID]));
+                          context.read<DbBloc>().add(DeleteNote(id: allNotes[index].id!));
                         },
                         icon: Icon(Icons.delete, color: Colors.red),
                       ),

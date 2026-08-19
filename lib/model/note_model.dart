@@ -12,6 +12,7 @@ class NoteModel{
     required this.createdAt
   });
 
+  //fromMap to Model
   factory NoteModel.fromMap(Map<String,dynamic> map){
     return NoteModel(
         id: map[DBHelper.COLUMN_NOTE_ID],
@@ -21,6 +22,7 @@ class NoteModel{
     );
   }
 
+  //from model toMap
   Map<String,dynamic> toMap(){
     return {
       DBHelper.COLUMN_NOTE_TITLE : title,

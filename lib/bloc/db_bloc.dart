@@ -1,6 +1,7 @@
 import 'package:database_sqflite/bloc/db_events.dart';
 import 'package:database_sqflite/bloc/db_state.dart';
 import 'package:database_sqflite/database/db_helper.dart';
+import 'package:database_sqflite/model/note_model.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 
 class DbBloc extends Bloc<DBEvents, DBState>{
@@ -10,9 +11,11 @@ class DbBloc extends Bloc<DBEvents, DBState>{
     on<AddNote>((event, emit) async{
       emit(DBLoadingState());
       bool check = await dbHelper.addNote(
-          title: event.title,
-          desc: event.desc,
-          createdAt: event.createdAt
+         newNote: NoteModel(
+             title: event.newNote.title,
+             desc: event.newNote.desc,
+             createdAt: event.newNote.createdAt
+         )
       );
       if(check){
         var data = await dbHelper.getAllNotes();
@@ -26,10 +29,12 @@ class DbBloc extends Bloc<DBEvents, DBState>{
     on<UpdateNote>((event, emit) async{
       emit(DBLoadingState());
       bool check = await dbHelper.updateNote(
-          updatedTitle: event.title,
-          updatedDesc: event.desc,
-          updatedAt: event.updatedAt,
-          id: event.id
+          updateNote: NoteModel(
+              title: event.updateNote.title,
+              desc: event.updateNote.desc,
+              createdAt: event.updateNote.createdAt,
+              id: event.updateNote.id
+          )
       );
       if(check){
         var data = await dbHelper.getAllNotes();
